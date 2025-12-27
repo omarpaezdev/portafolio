@@ -47,7 +47,7 @@ const Hero = () => {
               </div>
             </div>
             <div className="col-md-6 text-center">
-              <img src={imgPerfil} alt="Omar Páez" className="hero-image" />
+              <img src="https://res.cloudinary.com/dp6e1sg4y/image/upload/v1765917944/img_perfil_bppwgp.png" alt="Omar Páez" className="hero-image" />
             </div>
           </div>
         </div>

@@ -2,6 +2,11 @@ import React, { useEffect } from "react"
 import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import Hero from "../components/Hero.jsx";
+import About from "../components/About.jsx";
+import Skills from "../components/Skills.jsx";
+import Projects from "../components/Projects.jsx";
+import Contact from "../components/Contact.jsx";
+import SocialSidebar from "../components/SocialSidebar.jsx";
 
 export const Home = () => {
 
@@ -36,20 +41,21 @@ export const Home = () => {
 	return (
 		<div className="text-center home-container">
 			<main>
+				<SocialSidebar />
 				<section id="hero">
 					<Hero/>
 				</section>
 				<section id="about">
-
+					<About/>	
 				</section>
 				<section id="skills">
-
+					<Skills/>
 				</section>
 				<section id="projects">
-
+					<Projects/>
 				</section>
 				<section id="contact">
-
+					<Contact/>
 				</section>
 			</main>
 		</div>

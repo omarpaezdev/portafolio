@@ -28,7 +28,7 @@ export const Navbar = ({ activeSection, setActiveSection }) => {
         {/*Logo*/}
         <a className="navbar-brand logo-brand"></a>
         <button
-          class="navbar-toggler"
+          className="navbar-toggler navbar-icon bg-white "
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -36,7 +36,7 @@ export const Navbar = ({ activeSection, setActiveSection }) => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon bg-white "></span>
         </button>
         {/* Navbar Desktop */}
         <div
