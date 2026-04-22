@@ -1,61 +1,42 @@
-import imgPerfil from '../assets/img/img_perfil.png';
+// Si tienes una foto, importa y pasa como prop:
+// import foto from "../assets/foto.jpg"
+// <Hero foto={foto} />
 
-
-const Hero = () => {
-
-    const handleContact = () => {
-        const contactSection = document.getElementById('contact');
-        if (contactSection) {
-            contactSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
-    const handleDownloadCV = () => {
-        const cvUrl = 'https://drive.google.com/file/d/1JEn7U1EOORuOWUwfy3I9twQdhPLzGUJ8/view?usp=drive_link';
-        window.open(cvUrl, '_blank');
-    }
-
-
-
-
-    return (
-      <section className="hero-section">
-        <div className="container  ">
-          <div className="row align-items-center">
-            <div className="col-lg-6 text-center text-md-start">
-              <h1 className="hero-title">Hola, soy Omar Páez</h1>
-              <p className="hero-subtitle">
-                Desarrollador FullStack. Enfocado en la resolución eficiente de
-                problemas y la colaboración efectiva en equipos.
-              </p>
-
-              <div className="d-flex justify-content-center flex-column flex-sm-row gap-4">
-                <button
-                  type="button"
-                  className="btn btn-custom btn-contact"
-                  onClick={handleContact}
-                >
-                  Contactame
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-custom btn-download"
-                  onClick={handleDownloadCV}
-                >
-                  Descargar CV
-                </button>
-              </div>
-            </div>
-            <div className="col-md-6 text-center">
-              <img src="https://res.cloudinary.com/dp6e1sg4y/image/upload/v1765917944/img_perfil_bppwgp.png" alt="Omar Páez" className="hero-image" />
-            </div>
+export default function Hero({ foto }) {
+  return (
+    <section className="op-hero" id="inicio">
+      <div className="op-hero-grid">
+        <div>
+          <div className="op-hero-tag">Full Stack Developer · disponible</div>
+          <h1 className="op-hero-name">
+            <span className="line">Hola, soy</span>
+            <span className="line">Omar Páez</span>
+          </h1>
+          <p className="op-hero-sub">
+            Desarrollador FullStack. Enfocado en la resolución eficiente de
+            problemas y la colaboración efectiva en equipos.
+          </p>
+          <div className="op-hero-actions">
+            <a href="#contacto" className="op-btn op-btn-primary">Contáctame →</a>
+            {/* Reemplaza href con la URL real de tu CV */}
+            <a href="#" className="op-btn op-btn-ghost">Descargar CV</a>
           </div>
         </div>
-      </section>
-    );
 
+        <div className="op-hero-photo-wrap">
+          {foto ? (
+            <img className="op-hero-photo" src={foto} alt="Omar Páez" />
+          ) : (
+            // Quita esto cuando añadas tu foto
+            <div className="op-hero-photo-placeholder">OP</div>
+          )}
+        </div>
+      </div>
 
-
+      <div className="op-hero-scroll">
+        <div className="op-scroll-line" />
+        <span className="op-scroll-label">scroll</span>
+      </div>
+    </section>
+  );
 }
-
-export default Hero;

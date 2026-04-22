@@ -1,63 +1,48 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+// ─── Importa el CSS (ajusta la ruta a tu estructura) ───────────────────────
+import "../index.css";
+
+// ─── Hooks ─────────────────────────────────────────────────────────────────
+import { useCursor, useBgCanvas, useScrollReveal, useNavScroll } from "../hooks/usePortfolio.js";
+
+
+// ─── Componentes ───────────────────────────────────────────────────────────
+import { Navbar, Sidebar } from "../components/NavSidebar.jsx";
 import Hero from "../components/Hero.jsx";
-import About from "../components/About.jsx";
-import Skills from "../components/Skills.jsx";
+import { Conoceme, Skills } from "../components/ConocemeSkills.jsx";
 import Projects from "../components/Projects.jsx";
-import Contact from "../components/Contact.jsx";
-import SocialSidebar from "../components/SocialSidebar.jsx";
+import { Contact, Footer } from "../components/ContactFooter.jsx";
+
+// ─── Foto (descomenta y ajusta la ruta cuando tengas la imagen) ─────────────
+//import foto from "../assets/foto.jpg";
 
 export const Home = () => {
+  useCursor();
+  useBgCanvas();
+  useScrollReveal();
+  useNavScroll();
 
-	const { store, dispatch } = useGlobalReducer()
+  return (
+    <>
+      {/* Cursor */}
+      <div className="op-cursor" id="op-cur" />
+      <div className="op-cursor-ring" id="op-cur-ring" />
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
+      {/* Fondo animado */}
+      <canvas className="op-bg-canvas" id="op-canvas" />
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
+      {/* Layout */}
+      <Sidebar />
+      {/* <Navbar /> */}
 
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
+      <main>
+        <Hero /* foto={foto} */ />
+        <Conoceme />
+        <Skills />
+        <Projects />
+        <Contact />
+      </main>
 
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
-
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
-
-	return (
-		<div className="text-center home-container">
-			<main>
-				<SocialSidebar />
-				<section id="hero">
-					<Hero/>
-				</section>
-				<section id="about">
-					<About/>	
-				</section>
-				<section id="skills">
-					<Skills/>
-				</section>
-				<section id="projects">
-					<Projects/>
-				</section>
-				<section id="contact">
-					<Contact/>
-				</section>
-			</main>
-		</div>
-	);
-}; 
+      <Footer />
+    </>
+  );
+}
