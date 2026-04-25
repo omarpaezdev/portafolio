@@ -55,9 +55,9 @@ export function Contact() {
             <p>Estoy disponible para nuevas oportunidades y proyectos.</p>
           </div>
           <div className="op-contact-list">
-            <a href="mailto:paez142@gmail.com" className="op-contact-item">
+            <a href="mailto:info@omarpaez.es" className="op-contact-item">
               <EmailIcon />
-              paez142@gmail.com
+              info@omarpaez.es
             </a>
             <a href="https://www.linkedin.com/in/omarpaez/" target="_blank" rel="noreferrer" className="op-contact-item">
               <LinkedInIcon />
