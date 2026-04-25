@@ -1,8 +1,11 @@
 // Si tienes una foto, importa y pasa como prop:
-// import foto from "../assets/foto.jpg"
-// <Hero foto={foto} />
 
-export default function Hero({ foto }) {
+
+//import foto from "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1777113351/foto_syyokt.png"; // Asegúrate de que la ruta sea correcta 
+//<Hero foto={foto} />
+
+export default function Hero() {
+  const foto = "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1777113351/foto_syyokt.png"; // Asegúrate de que la ruta sea correcta
   return (
     <section className="op-hero" id="inicio">
       <div className="op-hero-grid">
@@ -19,17 +22,13 @@ export default function Hero({ foto }) {
           <div className="op-hero-actions">
             <a href="#contacto" className="op-btn op-btn-primary">Contáctame →</a>
             {/* Reemplaza href con la URL real de tu CV */}
-            <a href="#" className="op-btn op-btn-ghost">Descargar CV</a>
+            <a href="https://drive.google.com/file/d/1uQKcxLLc7zSurrjowhzDnfY1VGxSEBkS/view?usp=sharing" target="_blank" rel="noopener" className="op-btn op-btn-ghost">Descargar CV</a>
           </div>
         </div>
 
         <div className="op-hero-photo-wrap">
-          {foto ? (
-            <img className="op-hero-photo" src={foto} alt="Omar Páez" />
-          ) : (
-            // Quita esto cuando añadas tu foto
-            <div className="op-hero-photo-placeholder">OP</div>
-          )}
+          <img className="op-hero-photo" src={foto} alt="Omar Páez" />
+          
         </div>
       </div>
 

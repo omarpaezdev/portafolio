@@ -34,11 +34,11 @@ const Contact = () => {
 
             <div className="d-flex flex-column gap-3">
               <a
-                href="mailto:paez142@gmail.com"
+                href="mailto:info@omarpaez.es"
                 className="contact-item"
               >
-                <Mail className='contact-icon'/>
-                <span className="contact-text">paez142@gmail.com</span>
+                <Mail className='contact-icon' />
+                <span className="contact-text">info@omarpaez.es</span>
               </a>
 
               <a
