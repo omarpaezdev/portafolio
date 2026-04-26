@@ -5,7 +5,7 @@
 //<Hero foto={foto} />
 
 export default function Hero() {
-  const foto = "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1777113351/foto_syyokt.png"; // Asegúrate de que la ruta sea correcta
+  const foto = "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1777200272/foto_xquef2.png"; // Asegúrate de que la ruta sea correcta
   return (
     <section className="op-hero" id="inicio">
       <div className="op-hero-grid">
@@ -28,7 +28,7 @@ export default function Hero() {
 
         <div className="op-hero-photo-wrap">
           <img className="op-hero-photo" src={foto} alt="Omar Páez" />
-          
+
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom/dist"
 import ScrollToTop from "../components/ScrollToTop"
 import {Navbar} from "../components/NavSidebar"
-import Footer from "../components/Footer"
+import {Footer} from "../components/ContactFooter"
 import { Sidebar } from "../components/NavSidebar"
 
 
