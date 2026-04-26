@@ -138,13 +138,13 @@ function ProjectModal({ project, onClose }) {
         }}
       >
         <div style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "2px",
-          background: "linear-gradient(90deg, #00e5b0, transparent)"
-        }} />
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "2px",
+              background: "linear-gradient(90deg, #00e5b0, transparent)"
+            }} />
         <button 
           className="op-modal-close" 
           onClick={onClose}
@@ -189,28 +189,35 @@ function ProjectModal({ project, onClose }) {
 
         {hasGallery && (
           <div style={{
+            width: "100%",
+            minHeight: "250px",
+            maxHeight: "400px",
+            background: "#0d0d14",
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
-            padding: "0 1.5rem",
-            marginBottom: "1rem"
+            justifyContent: "center",
+            position: "relative",
+            overflow: "hidden"
           }}>
             <button 
               className="op-gallery-btn" 
               onClick={prevImage}
               style={{
-                width: "36px",
-                height: "36px",
-                flexShrink: 0,
-                borderRadius: "8px",
+                position: "absolute",
+                left: "1rem",
+                zIndex: 10,
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
                 border: "1px solid rgba(255,255,255,0.07)",
-                background: "#13131d",
+                background: "rgba(19, 19, 29, 0.8)",
                 color: "#9896a4",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: "pointer",
-                transition: "all 0.2s"
+                transition: "all 0.2s",
+                backdropFilter: "blur(4px)"
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = "#00e5b0";
@@ -223,42 +230,34 @@ function ProjectModal({ project, onClose }) {
             >
               <ChevronLeft />
             </button>
-            <div style={{
-              flex: 1,
-              aspectRatio: "16/9",
-              overflow: "hidden",
-              borderRadius: "8px",
-              background: "#0d0d14",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              <img 
-                src={images[currentImage]} 
-                alt={`${project.title} - ${currentImage + 1}`} 
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain"
-                }} 
-              />
-            </div>
+            <img 
+              src={images[currentImage]} 
+              alt={`${project.title} - ${currentImage + 1}`} 
+              style={{
+                maxWidth: "90%",
+                maxHeight: "350px",
+                objectFit: "contain"
+              }} 
+            />
             <button 
               className="op-gallery-btn" 
               onClick={nextImage}
               style={{
-                width: "36px",
-                height: "36px",
-                flexShrink: 0,
-                borderRadius: "8px",
+                position: "absolute",
+                right: "1rem",
+                zIndex: 10,
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
                 border: "1px solid rgba(255,255,255,0.07)",
-                background: "#13131d",
+                background: "rgba(19, 19, 29, 0.8)",
                 color: "#9896a4",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: "pointer",
-                transition: "all 0.2s"
+                transition: "all 0.2s",
+                backdropFilter: "blur(4px)"
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = "#00e5b0";
@@ -278,7 +277,7 @@ function ProjectModal({ project, onClose }) {
           <div style={{
             display: "flex",
             justifyContent: "center",
-            gap: "0.5rem",
+            gap: "1rem",
             paddingBottom: "1rem"
           }}>
             {images.map((_, i) => (

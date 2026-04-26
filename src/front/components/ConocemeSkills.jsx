@@ -1,3 +1,5 @@
+import { useState, useRef, useEffect } from "react";
+
 const SKILLS = [
   { name: "React",       src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
   { name: "Python",      src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
@@ -45,6 +47,50 @@ export function Conoceme() {
 }
 
 export function Skills() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isMobile, setIsMobile] = useState(true);
+  const sliderRef = useRef(null);
+  const itemsPerSlide = 2;
+  const totalSlides = Math.ceil(SKILLS.length / itemsPerSlide);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+    if (sliderRef.current) {
+      sliderRef.current.style.transform = `translateX(-${index * 100}%)`;
+    }
+  };
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  const handleTouchStart = (e) => {
+    touchStartX = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        goToSlide((currentSlide + 1) % totalSlides);
+      } else {
+        goToSlide((currentSlide - 1 + totalSlides) % totalSlides);
+      }
+    }
+  };
+
   return (
     <section className="op-section" id="skills">
       <div className="op-section-header op-reveal">
@@ -52,8 +98,54 @@ export function Skills() {
         <h2 className="op-section-title">Skills</h2>
         <div className="op-section-line" />
       </div>
-      <div className="op-skills-card op-reveal op-rd1">
-        <div className="op-skills-grid">
+
+      <div 
+        id="op-skills-slider-wrapper" 
+        className="op-skills-slider-outer op-reveal op-rd1"
+        style={{ display: isMobile ? "block" : "none" }}
+      >
+        <div
+          className="op-skills-slider"
+          ref={sliderRef}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+            <div className="op-skills-slide" key={slideIndex}>
+              {SKILLS
+                .slice(slideIndex * itemsPerSlide, (slideIndex + 1) * itemsPerSlide)
+                .map((s, idx) => (
+                  <div className="op-skill-item" key={s.name}>
+                    <img src={s.src} alt={s.name} style={s.style} />
+                    <span className="op-skill-name">{s.name}</span>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div 
+        id="op-skills-dots-wrapper" 
+        className="op-skills-dots op-reveal"
+        style={{ display: isMobile ? "flex" : "none" }}
+      >
+        {Array.from({ length: totalSlides }).map((_, index) => (
+          <button
+            key={index}
+            className={`op-skill-dot${index === currentSlide ? " active" : ""}`}
+            onClick={() => goToSlide(index)}
+          />
+        ))}
+      </div>
+
+      <div 
+        id="op-skills-grid-wrapper" 
+        className="op-skills-card op-reveal op-rd1 desktop-only"
+        style={{ display: isMobile ? "none" : "grid" }}
+      >
+        <div className="op-skills-grid desktop-only">
           {SKILLS.map((s) => (
             <div className="op-skill-item" key={s.name}>
               <img src={s.src} alt={s.name} style={s.style} />

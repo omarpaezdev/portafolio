@@ -42,7 +42,7 @@ export const Home = () => {
         <Contact />
       </main>
 
-      <Footer />
+     
     </>
   );
 }
