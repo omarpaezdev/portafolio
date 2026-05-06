@@ -544,10 +544,28 @@ body.op-ch .op-cursor-ring {
   transition: border-color 0.4s, transform 0.3s;
 
   width: 100%;
-  max-width: 350px;   /* 🔥 clave */
-  margin: 0 auto;     /* centra */
+  max-width: 350px;
+  margin: 0 auto;
   
   position: relative;
+  
+  /* Make all cards same height */
+  display: flex;
+  flex-direction: column;
+}
+
+.op-project-body {
+  padding: 2rem;
+  /* Take remaining height */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.op-project-desc-wrap {
+  margin-bottom: 1.5rem;
+  /* Allow this section to grow and contain the truncation */
+  flex: 1;
 }
 .op-project-card:hover {
   border-color: var(--accent);
@@ -950,7 +968,7 @@ body.op-ch .op-cursor-ring {
   text-align: center;
 }
 
-/* ── DESCRIPTION TRUNCATED ── */
+/* ── DESCRIPTION ── */
 .op-project-desc-wrap {
   margin-bottom: 1.5rem;
 }
@@ -959,13 +977,6 @@ body.op-ch .op-cursor-ring {
   font-size: 0.9rem;
   line-height: 1.7;
   margin-bottom: 0;
-}
-.op-project-desc.truncated {
-  display: -webkit-box !important;
-  -webkit-line-clamp: 4 !important;
-  line-clamp: 4 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
 }
 .op-btn-link {
   background: none !important;
@@ -1001,7 +1012,7 @@ body.op-ch .op-cursor-ring {
 .op-modal-overlay {
   position: fixed !important;
   inset: 0 !important;
-  z-index: 200 !important;
+  z-index: 9999 !important;
   background: rgba(6, 6, 10, 0.95) !important;
   display: flex !important;
   align-items: center !important;

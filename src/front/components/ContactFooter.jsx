@@ -28,15 +28,52 @@ function GithubIcon() {
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí conecta tu backend Flask: fetch("/api/contact", { method: "POST", body: JSON.stringify(form) })
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-    setForm({ name: "", email: "", topic: "", message: "" });
+    setError("");
+    setLoading(true);
+
+    try {
+      const token = await window.grecaptcha.execute(
+        import.meta.env.VITE_RECAPTCHA_SITE_KEY,
+        { action: "contact" }
+      );
+
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+      const res = await fetch(`${backendUrl}api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, recaptchaToken: token }),
+      });
+
+      let data;
+      const text = await res.text();
+      if (!text) {
+        throw new Error("El servidor no respondió. ¿Está el backend activo?");
+      }
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(`Respuesta inválida del servidor: ${text}`);
+      }
+
+      if (!res.ok) {
+        throw new Error(data.error || "Error al enviar mensaje");
+      }
+
+      setSent(true);
+      setTimeout(() => setSent(false), 4000);
+      setForm({ name: "", email: "", topic: "", message: "" });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -104,8 +141,9 @@ export function Contact() {
                 value={form.message} onChange={handleChange} required
               />
             </div>
-            <button type="submit" className="op-btn-send">
-              {sent ? "✓ Mensaje enviado" : "Enviar"}
+            {error && <div className="op-form-error">{error}</div>}
+            <button type="submit" className="op-btn-send" disabled={loading}>
+              {loading ? "Enviando..." : sent ? "✓ Mensaje enviado" : "Enviar"}
             </button>
           </form>
         </div>
