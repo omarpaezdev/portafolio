@@ -157,9 +157,15 @@ export function Contact() {
 export function Footer() {
   return (
     <footer className="op-footer">
-      <span className="op-footer-copy">
-        © 2026 Omar Alfonso Páez Carrero — Desarrollador Freelance
-      </span>
+      <div className="op-footer-left">
+        <span className="op-footer-copy">
+          © 2026 Omar Alfonso Páez Carrero — Desarrollador Freelance
+        </span>
+        <div className="op-footer-links">
+          <a href="/aviso-legal">Aviso Legal</a>
+          <a href="/politica-privacidad">Política de Privacidad</a>
+        </div>
+      </div>
       <span className="op-footer-right">
         <span>TallerPro</span> es un proyecto de software operado por Omar Páez
       </span>
