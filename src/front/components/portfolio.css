@@ -453,6 +453,10 @@ body.op-ch .op-cursor-ring { width: 56px; height: 56px; opacity: .25; }
   cursor: none; transition: transform .2s, box-shadow .2s;
 }
 .op-btn-send:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,229,176,.3); }
+.op-btn-send:disabled { opacity: .6; cursor: not-allowed; }
+.op-form-error {
+  color: #ff4d4d; font-size: .8rem; margin-bottom: 1rem; text-align: center;
+}
 
 /* ── FOOTER ── */
 .op-footer {

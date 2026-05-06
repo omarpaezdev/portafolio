@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from "react";
-
+import { useState, useRef } from "react";
 
 const PROJECTS = [
   {
@@ -18,23 +17,7 @@ const PROJECTS = [
     id: 2,
     title: "TallerPro",
     images: ["https://res.cloudinary.com/dp6e1sg4y/image/upload/v1776881948/tallerpro_1_wi5hbr.png", "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1776881948/tallerpro_2_cvegmu.png", "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1776881948/tallerpro_3_afbrpy.png", "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1776881948/tallerpro_4_fyni5i.png", "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1776881948/tallerpro_5_axlunq.png", "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1776881948/tallerpro_6_qiwfdb.png"],
-    desc: `Funcionalidades Principales
-            Gestión de vehículos y clientes
-            Registro de vehículos con ficha técnica completa (VIN, matrícula, tipo de combustible, transmisión, kilometraje) y vinculación a clientes con datos de contacto y documentación.
-            Diagnósticos
-            Los técnicos generan informes de diagnóstico con imágenes, horas estimadas y estados (borrador, completado, enviado al cliente). Cada diagnóstico genera un enlace público único con token para que el cliente lo consulte sin autenticación.
-            Presupuestos
-            Creación, envío y aprobación/rechazo digital de presupuestos. El cliente firma digitalmente desde un enlace público. El sistema registra IPs, timestamps y estado del flujo completo.
-            Tracking de vehículos en tiempo real
-            Sistema de seguimiento por etapas (recepción → diagnóstico → presupuesto → reparación → prueba de ruta → entrega) visible para el cliente mediante token único, sin necesidad de login.
-            Notificaciones automáticas vía WhatsApp
-            Integración con la API de WhatsApp Business de Meta. Cada cambio de estado del vehículo dispara una notificación automatizada al cliente usando templates aprobados por Meta (recepción, diagnóstico enviado, presupuesto para aprobación, reparación iniciada, listo para entrega, etc.).
-            Configuración del taller con OAuth
-            Panel de administración para configurar los datos del taller y conectar la cuenta de WhatsApp Business mediante flujo OAuth 2.0 con Meta. Las credenciales se almacenan en base de datos con fallback a variables de entorno.
-            Control de acceso por roles
-            Sistema de permisos con roles ADMIN y TECHNICIAN. Los técnicos sólo pueden gestionar sus propios diagnósticos; los administradores tienen acceso completo incluyendo eliminación y configuración global.
-            Entregas y seguimiento post-entrega
-            Registro de entregas con checklist digital, firma del cliente y seguimiento posterior con nivel de satisfacción e incidencias reportadas.`,
+    desc: "Funcionalidades Principales: Gestión de vehículos y clientes. Registro de vehículos con ficha técnica completa (VIN, matrícula, tipo de combustible, transmisión, kilometraje) y vinculación a clientes con datos de contacto y documentación. Diagnósticos: Los técnicos generan informes de diagnóstico con imágenes, horas estimadas y estados. Cada diagnóstico genera un enlace público único con token para que el cliente lo consulte sin autenticación. Presupuestos: Creación, envío y aprobación/rechazo digital de presupuestos. Tracking de vehículos en tiempo real. Notificaciones automáticas vía WhatsApp Business API.",
     year: "2026",
     duration: "4 meses",
     difficulty: "Avanzado",
@@ -77,314 +60,6 @@ function CloseIcon() {
   );
 }
 
-function ProjectModal({ project, onClose }) {
-  const [currentImage, setCurrentImage] = useState(0);
-  const images = project.images || [];
-  const hasGallery = images.length > 1;
-
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleEsc);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "";
-    };
-  }, [onClose]);
-
-  const prevImage = () => setCurrentImage((c) => (c - 1 + images.length) % images.length);
-  const nextImage = () => setCurrentImage((c) => (c + 1) % images.length);
-
-  return (
-    <div 
-      className="op-modal-overlay" 
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 1000,
-        background: "rgba(6, 6, 10, 0.92)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "2rem 1rem",
-        backdropFilter: "blur(8px)"
-      }}
-    >
-      <div 
-        className="op-modal-content" 
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "#06060a",
-          border: "1px solid rgba(0, 229, 176, 0.2)",
-          borderRadius: "16px",
-          width: "100%",
-          maxWidth: "560px",
-          maxHeight: "80vh",
-          overflowX: "hidden",
-          overflowY: "auto",
-          position: "relative",
-          boxShadow: "0 0 60px rgba(0, 229, 176, 0.1), 0 25px 50px rgba(0, 0, 0, 0.5)",
-          scrollbarWidth: "thin",
-          scrollbarColor: "#5a5868 #0d0d14"
-        }}
-        onScroll={(e) => {
-          const thumb = e.currentTarget;
-          if (thumb.scrollHeight > thumb.clientHeight) {
-            thumb.style.scrollbarColor = "#00e5b0";
-          }
-        }}
-      >
-        <div style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "2px",
-              background: "linear-gradient(90deg, #00e5b0, transparent)"
-            }} />
-        <button 
-          className="op-modal-close" 
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "1rem",
-            right: "1rem",
-            zIndex: 10,
-            background: "#13131d",
-            border: "1px solid rgba(255,255,255,0.07)",
-            borderRadius: "8px",
-            width: "36px",
-            height: "36px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#9896a4",
-            cursor: "pointer",
-            transition: "all 0.2s"
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "#00e5b0";
-            e.currentTarget.style.color = "#00e5b0";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-            e.currentTarget.style.color = "#9896a4";
-          }}
-        >
-          <CloseIcon />
-        </button>
-        
-        <div style={{ padding: "1.5rem 1.5rem 0" }}>
-          <h3 style={{
-            fontFamily: "'Syne', sans-serif",
-            fontSize: "1.5rem",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            marginBottom: "1rem"
-          }}>{project.title}</h3>
-        </div>
-
-        {hasGallery && (
-          <div style={{
-            width: "100%",
-            minHeight: "250px",
-            maxHeight: "400px",
-            background: "#0d0d14",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            overflow: "hidden"
-          }}>
-            <button 
-              className="op-gallery-btn" 
-              onClick={prevImage}
-              style={{
-                position: "absolute",
-                left: "1rem",
-                zIndex: 10,
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.07)",
-                background: "rgba(19, 19, 29, 0.8)",
-                color: "#9896a4",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "all 0.2s",
-                backdropFilter: "blur(4px)"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#00e5b0";
-                e.currentTarget.style.color = "#00e5b0";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-                e.currentTarget.style.color = "#9896a4";
-              }}
-            >
-              <ChevronLeft />
-            </button>
-            <img 
-              src={images[currentImage]} 
-              alt={`${project.title} - ${currentImage + 1}`} 
-              style={{
-                maxWidth: "90%",
-                maxHeight: "350px",
-                objectFit: "contain"
-              }} 
-            />
-            <button 
-              className="op-gallery-btn" 
-              onClick={nextImage}
-              style={{
-                position: "absolute",
-                right: "1rem",
-                zIndex: 10,
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.07)",
-                background: "rgba(19, 19, 29, 0.8)",
-                color: "#9896a4",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                transition: "all 0.2s",
-                backdropFilter: "blur(4px)"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#00e5b0";
-                e.currentTarget.style.color = "#00e5b0";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-                e.currentTarget.style.color = "#9896a4";
-              }}
-            >
-              <ChevronRight />
-            </button>
-          </div>
-        )}
-
-        {hasGallery && images.length > 1 && (
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "1rem",
-            paddingBottom: "1rem"
-          }}>
-            {images.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentImage(i)}
-                style={{
-                  width: i === currentImage ? "20px" : "8px",
-                  height: "8px",
-                  borderRadius: i === currentImage ? "4px" : "50%",
-                  background: i === currentImage ? "#00e5b0" : "#5a5868",
-                  border: "none",
-                  cursor: "pointer",
-                  transition: "all 0.3s",
-                  padding: 0
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        <div style={{ padding: "0 1.5rem 2rem" }}>
-          <p style={{
-            color: "#9896a4",
-            fontSize: "0.95rem",
-            lineHeight: 1.8,
-            whiteSpace: "pre-wrap",
-            marginBottom: "1.5rem"
-          }}>{project.desc}</p>
-          
-          <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
-              <span>📅</span><span><strong style={{ color: "#f0eee8" }}>Año:</strong> {project.year}</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
-              <span>⏱</span><span><strong style={{ color: "#f0eee8" }}>Duración:</strong> {project.duration}</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
-              <span>🎯</span><span><strong style={{ color: "#f0eee8" }}>Dificultad:</strong> {project.difficulty}</span>
-            </div>
-          </div>
-          
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1.75rem" }}>
-            {project.tags.map((t) => (
-              <span 
-                key={t}
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: "0.68rem",
-                  color: "#00e5b0",
-                  background: "rgba(0,229,176,0.08)",
-                  border: "1px solid rgba(0,229,176,0.2)",
-                  padding: "0.28rem 0.7rem",
-                  borderRadius: "4px",
-                  letterSpacing: "0.04em"
-                }}
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-          
-          <div style={{ display: "flex", gap: "0.75rem" }}>
-            <a 
-              href={project.demo} 
-              style={{
-                background: "transparent",
-                color: "#00e5b0",
-                border: "1px solid #00e5b0",
-                padding: "0.6rem 1.25rem",
-                borderRadius: "4px",
-                textDecoration: "none",
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "0.72rem",
-                letterSpacing: "0.08em",
-                transition: "all 0.2s"
-              }}
-            >
-              ⚡ Demo
-            </a>
-            <a 
-              href={project.repo} 
-              style={{
-                background: "#13131d",
-                color: "#f0eee8",
-                border: "1px solid rgba(255,255,255,0.07)",
-                padding: "0.6rem 1.25rem",
-                borderRadius: "4px",
-                textDecoration: "none",
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "0.72rem",
-                letterSpacing: "0.08em",
-                transition: "all 0.2s",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem"
-              }}
-            >
-              <GithubIcon /> GitHub
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Projects() {
   const [current, setCurrent] = useState(0);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -412,113 +87,375 @@ export default function Projects() {
   };
 
   return (
-    <section className="op-section op-section-alt" id="proyectos">
-      <div className="op-section-header op-reveal">
-        <span className="op-section-num">03</span>
-        <h2 className="op-section-title">Proyectos</h2>
-        <div className="op-section-line" />
-      </div>
+    <>
+      <section className="op-section op-section-alt" id="proyectos">
+        <div className="op-section-header op-reveal">
+          <span className="op-section-num">03</span>
+          <h2 className="op-section-title">Proyectos</h2>
+          <div className="op-section-line" />
+        </div>
 
-      <div className="op-reveal op-rd1">
-        <div className="op-slider-outer">
-          <div
-            className="op-slider"
-            ref={sliderRef}
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-          >
-            {PROJECTS.map((p) => (
-              <div className="op-slide" key={p.id}>
-                <div className="op-project-card">
-                  {p.images && p.images[0] ? (
-                    <img className="op-project-img" src={p.images[0]} alt={p.title} />
-                  ) : (
-                    <div className="op-project-img-placeholder">
-                      <span>{p.title}</span>
-                    </div>
-                  )}
-                  <div className="op-project-body">
-                    <h3 className="op-project-title">{p.title}</h3>
-                    <div className="op-project-desc-wrap" style={{ marginBottom: "1.5rem" }}>
-                      <p 
-                        className={`op-project-desc${needsTruncation(p.desc) ? " truncated" : ""}`}
-                        style={needsTruncation(p.desc) ? {
-                          display: "-webkit-box",
-                          WebkitLineClamp: 4,
-                          lineClamp: 4,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden"
-                        } : {}}
-                      >
-                        {p.desc}
-                      </p>
-                      {needsTruncation(p.desc) && (
-                        <button 
-                          className="op-btn-link" 
-                          onClick={() => setSelectedProject(p)}
-                          style={{
-                            background: "transparent",
-                            border: "none",
-                            color: "#00e5b0",
-                            cursor: "pointer",
-                            marginTop: "0.5rem"
-                          }}
+        <div className="op-reveal op-rd1">
+          <div className="op-slider-outer">
+            <div
+              className="op-slider"
+              ref={sliderRef}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
+            >
+              {PROJECTS.map((p) => (
+                <div className="op-slide" key={p.id}>
+                  <div className="op-project-card">
+                    {p.images && p.images[0] ? (
+                      <img className="op-project-img" src={p.images[0]} alt={p.title} />
+                    ) : (
+                      <div className="op-project-img-placeholder">
+                        <span>{p.title}</span>
+                      </div>
+                    )}
+                    <div className="op-project-body">
+                      <h3 className="op-project-title">{p.title}</h3>
+                      <div className="op-project-desc-wrap">
+                        <p 
+                          className={`op-project-desc${needsTruncation(p.desc) ? " truncated" : ""}`}
+                          style={needsTruncation(p.desc) ? {
+                            display: "-webkit-box",
+                            WebkitLineClamp: 4,
+                            lineClamp: 4,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden"
+                          } : {}}
                         >
-                          Ver más
-                        </button>
-                      )}
-                    </div>
-                    <div className="op-project-meta">
-                      <div className="op-project-meta-item">
-                        <span>📅</span><span><strong>Año:</strong> {p.year}</span>
+                          {p.desc}
+                        </p>
+                        {needsTruncation(p.desc) && (
+                          <button 
+                            className="op-btn-link" 
+                            onClick={() => setSelectedProject(p)}
+                            style={{
+                              background: "transparent",
+                              border: "none",
+                              color: "#00e5b0",
+                              cursor: "pointer",
+                              marginTop: "0.5rem"
+                            }}
+                          >
+                            Ver más
+                          </button>
+                        )}
                       </div>
-                      <div className="op-project-meta-item">
-                        <span>⏱</span><span><strong>Duración:</strong> {p.duration}</span>
+                      <div className="op-project-meta">
+                        <div className="op-project-meta-item">
+                          <span>📅</span><span><strong>Año:</strong> {p.year}</span>
+                        </div>
+                        <div className="op-project-meta-item">
+                          <span>⏱</span><span><strong>Duración:</strong> {p.duration}</span>
+                        </div>
+                        <div className="op-project-meta-item">
+                          <span>🎯</span><span><strong>Dificultad:</strong> {p.difficulty}</span>
+                        </div>
                       </div>
-                      <div className="op-project-meta-item">
-                        <span>🎯</span><span><strong>Dificultad:</strong> {p.difficulty}</span>
+                      <div className="op-project-tags">
+                        {p.tags.map((t) => <span className="op-tag" key={t}>{t}</span>)}
                       </div>
-                    </div>
-                    <div className="op-project-tags">
-                      {p.tags.map((t) => <span className="op-tag" key={t}>{t}</span>)}
-                    </div>
-                    <div className="op-project-links">
-                      <a href={p.demo} className="op-btn op-btn-sm op-btn-demo" target="_blank" rel="noreferrer">
-                        ⚡ Demo
-                      </a>
-                      <a href={p.repo} className="op-btn op-btn-sm op-btn-gh" target="_blank" rel="noreferrer">
-                        <GithubIcon /> GitHub
-                      </a>
+                      <div className="op-project-links">
+                        <a href={p.demo} className="op-btn op-btn-sm op-btn-demo" target="_blank" rel="noreferrer">
+                          ⚡ Demo
+                        </a>
+                        <a href={p.repo} className="op-btn op-btn-sm op-btn-gh" target="_blank" rel="noreferrer">
+                          <GithubIcon /> GitHub
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="op-slider-nav">
-          <button className="op-slider-btn" onClick={() => goTo(current - 1)}>
-            <ChevronLeft />
-          </button>
-          <div className="op-slider-dots">
-            {PROJECTS.map((_, i) => (
-              <div
-                key={i}
-                className={`op-dot${i === current ? " active" : ""}`}
-                onClick={() => goTo(i)}
-              />
-            ))}
+          <div className="op-slider-nav">
+            <button className="op-slider-btn" onClick={() => goTo(current - 1)}>
+              <ChevronLeft />
+            </button>
+            <div className="op-slider-dots">
+              {PROJECTS.map((_, i) => (
+                <div
+                  key={i}
+                  className={`op-dot${i === current ? " active" : ""}`}
+                  onClick={() => goTo(i)}
+                />
+              ))}
+            </div>
+            <button className="op-slider-btn" onClick={() => goTo(current + 1)}>
+              <ChevronRight />
+            </button>
           </div>
-          <button className="op-slider-btn" onClick={() => goTo(current + 1)}>
-            <ChevronRight />
-          </button>
         </div>
-      </div>
+      </section>
 
       {selectedProject && (
-        <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+        <div 
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 1000,
+            background: "rgba(6, 6, 10, 0.92)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "2rem 1rem",
+            backdropFilter: "blur(8px)"
+          }}
+      onClick={() => setSelectedProject(null)}
+        >
+          <div 
+            style={{
+              background: "#06060a",
+              border: "1px solid rgba(0, 229, 176, 0.2)",
+              borderRadius: "16px",
+              width: "100%",
+              maxWidth: "560px",
+              maxHeight: "80vh",
+              overflowX: "hidden",
+              overflowY: "auto",
+              position: "relative",
+              boxShadow: "0 0 60px rgba(0, 229, 176, 0.1), 0 25px 50px rgba(0, 0, 0, 0.5)"
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "2px",
+              background: "linear-gradient(90deg, #00e5b0, transparent)"
+            }} />
+            <button 
+              onClick={() => setSelectedProject(null)}
+              style={{
+                position: "absolute",
+                top: "1rem",
+                right: "1rem",
+                zIndex: 10,
+                background: "#13131d",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: "8px",
+                width: "36px",
+                height: "36px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#9896a4",
+                cursor: "pointer",
+                transition: "all 0.2s"
+              }}
+            >
+              <CloseIcon />
+            </button>
+            
+            <div style={{ padding: "1.5rem 1.5rem 0" }}>
+              <h3 style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: "1.5rem",
+                fontWeight: 800,
+                letterSpacing: "-0.03em",
+                marginBottom: "1rem"
+              }}>{selectedProject.title}</h3>
+            </div>
+
+            {selectedProject.images && selectedProject.images.length > 0 && (
+              <div style={{
+                width: "100%",
+                minHeight: "250px",
+                maxHeight: "400px",
+                background: "#0d0d14",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                position: "relative",
+                overflow: "hidden"
+              }}>
+                {selectedProject.images.length > 1 && (
+                  <button 
+                    onClick={() => {
+                      const images = selectedProject.images;
+                      const currentIdx = images.indexOf(selectedProject.images[0]);
+                      const newIdx = (currentIdx - 1 + images.length) % images.length;
+                      setSelectedProject({...selectedProject, _currentImage: newIdx});
+                    }}
+                    style={{
+                      position: "absolute",
+                      left: "1rem",
+                      zIndex: 10,
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      border: "1px solid rgba(255,255,255,0.07)",
+                      background: "rgba(19, 19, 29, 0.8)",
+                      color: "#9896a4",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      backdropFilter: "blur(4px)"
+                    }}
+                  >
+                    <ChevronLeft />
+                  </button>
+                )}
+                <img 
+                  src={selectedProject.images[selectedProject._currentImage || 0]} 
+                  alt={selectedProject.title}
+                  style={{
+                    maxWidth: "90%",
+                    maxHeight: "350px",
+                    objectFit: "contain"
+                  }} 
+                />
+                {selectedProject.images.length > 1 && (
+                  <button 
+                    onClick={() => {
+                      const images = selectedProject.images;
+                      const currentIdx = selectedProject._currentImage || 0;
+                      const newIdx = (currentIdx + 1) % images.length;
+                      setSelectedProject({...selectedProject, _currentImage: newIdx});
+                    }}
+                    style={{
+                      position: "absolute",
+                      right: "1rem",
+                      zIndex: 10,
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      border: "1px solid rgba(255,255,255,0.07)",
+                      background: "rgba(19, 19, 29, 0.8)",
+                      color: "#9896a4",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      backdropFilter: "blur(4px)"
+                    }}
+                  >
+                    <ChevronRight />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {selectedProject.images && selectedProject.images.length > 1 && (
+              <div style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "0.5rem",
+                padding: "1rem 0"
+              }}>
+                {selectedProject.images.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedProject({...selectedProject, _currentImage: i})}
+                    style={{
+                      width: (selectedProject._currentImage || 0) === i ? "20px" : "8px",
+                      height: "8px",
+                      borderRadius: (selectedProject._currentImage || 0) === i ? "4px" : "50%",
+                      background: (selectedProject._currentImage || 0) === i ? "#00e5b0" : "#5a5868",
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.3s",
+                      padding: 0
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div style={{ padding: "0 1.5rem 2rem" }}>
+              <p style={{
+                color: "#9896a4",
+                fontSize: "0.95rem",
+                lineHeight: 1.8,
+                whiteSpace: "pre-wrap",
+                marginBottom: "1.5rem"
+              }}>{selectedProject.desc}</p>
+              
+              <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
+                  <span>📅</span><span><strong style={{ color: "#f0eee8" }}>Año:</strong> {selectedProject.year}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
+                  <span>⏱</span><span><strong style={{ color: "#f0eee8" }}>Duración:</strong> {selectedProject.duration}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
+                  <span>🎯</span><span><strong style={{ color: "#f0eee8" }}>Dificultad:</strong> {selectedProject.difficulty}</span>
+                </div>
+              </div>
+              
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1.75rem" }}>
+                {selectedProject.tags.map((t) => (
+                  <span 
+                    key={t}
+                    style={{
+                      fontFamily: "'DM Mono', monospace",
+                      fontSize: "0.68rem",
+                      color: "#00e5b0",
+                      background: "rgba(0,229,176,0.08)",
+                      border: "1px solid rgba(0,229,176,0.2)",
+                      padding: "0.28rem 0.7rem",
+                      borderRadius: "4px",
+                      letterSpacing: "0.04em"
+                    }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+              
+              <div style={{ display: "flex", gap: "0.75rem" }}>
+                <a 
+                  href={selectedProject.demo} 
+                  style={{
+                    background: "transparent",
+                    color: "#00e5b0",
+                    border: "1px solid #00e5b0",
+                    padding: "0.6rem 1.25rem",
+                    borderRadius: "4px",
+                    textDecoration: "none",
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.08em",
+                    transition: "all 0.2s"
+                  }}
+                >
+                  ⚡ Demo
+                </a>
+                <a 
+                  href={selectedProject.repo} 
+                  style={{
+                    background: "#13131d",
+                    color: "#f0eee8",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    padding: "0.6rem 1.25rem",
+                    borderRadius: "4px",
+                    textDecoration: "none",
+                    fontFamily: "'DM Mono', monospace",
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.08em",
+                    transition: "all 0.2s",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem"
+                  }}
+                >
+                  <GithubIcon /> GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
-    </section>
+    </>
   );
 }
