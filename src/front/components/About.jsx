@@ -12,20 +12,20 @@ const About = () => {
             <h2 className="section-title">¡Conoceme!</h2>
             <div className={`about-card ${showFullText ? "expanded" : "collapsed"}`}>
               <p>
-                Soy un desarrollador{" "}
-                <span style={{ color: "white", fontWeight: "500" }}>
-                  full stack
-                </span>
-                , que diseña y desarrolla sitios y aplicaciones web, lo que
-                contribuye al éxito del producto final. Consulta algunos de mis
-                trabajos en la sección de Proyectos.
+                Construyo aplicaciones web de principio a fin: desde interfaces
+                con React y Next.js hasta backends robustos con Python, Django,
+                Flask y PostgreSQL. También integro capacidades de IA para llevar
+                los productos un paso más allá.
               </p>
 
               <p>
-                También me gusta compartir contenido relacionado con lo que he
-                aprendido a lo largo de los años en desarrollo web para que
-                pueda ayudar a otros miembros de la comunidad de
-                desarrolladores. No dudes en conectarte o seguirme en{" "}
+                Con 2-4 años en el campo, he aprendido que el código más valioso
+                es el que resuelve problemas reales, y eso guía cada decisión que
+                tomo.
+              </p>
+
+              <p>
+                Comparto ese aprendizaje en{" "}
                 <a
                   href="https://linkedin.com/in/omarpaez"
                   target="_blank"
@@ -41,17 +41,9 @@ const About = () => {
                 >
                   Instagram
                 </a>
-                , donde publico contenido útil sobre desarrollo web y
-                programación.
+                . Y si buscas un desarrollador que contribuya, aprenda rápido y
+                no le tema a los retos, me encantaría que conversemos.
               </p>
-
-              <p>
-                Estoy abierto a oportunidades laborales donde pueda contribuir,
-                aprender y crecer. Si encuentras una buena oportunidad que se
-                ajuste a mis habilidades y experiencia, no dudes en contactarme.
-              </p>
-
-
             </div>
                 <button
                   className="read-more-btn"
