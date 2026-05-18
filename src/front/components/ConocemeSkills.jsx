@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 
 const SKILLS = [
   { name: "React",       src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+  { name: "Next.js",     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
   { name: "Python",      src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
   { name: "JavaScript",  src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
   { name: "Node JS",     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
@@ -25,21 +26,19 @@ export function Conoceme() {
       </div>
       <div className="op-conoceme-card op-reveal op-rd1">
         <p>
-          Soy un desarrollador <strong>full stack</strong>, que diseña y desarrolla sitios y aplicaciones
-          web, lo que contribuye al éxito del producto final. Consulta algunos de mis trabajos en la
-          sección de Proyectos.
+          Construyo aplicaciones web de principio a fin: desde interfaces con React y Next.js
+          hasta backends robustos con Python, Django, Flask y PostgreSQL. También integro
+          capacidades de IA para llevar los productos un paso más allá.
         </p>
         <p>
-          También me gusta compartir contenido relacionado con lo que he aprendido a lo largo de los
-          años en desarrollo web para que pueda ayudar a otros miembros de la comunidad de
-          desarrolladores. No dudes en conectarte o seguirme en{" "}
+          Con 2-4 años en el campo, he aprendido que el código más valioso es el que resuelve
+          problemas reales, y eso guía cada decisión que tomo.
+        </p>
+        <p>
+          Comparto ese aprendizaje en{" "}
           <a href="https://www.linkedin.com/in/omarpaez/" target="_blank" rel="noreferrer">LinkedIn</a>
-          {" "}e Instagram, donde publico contenido útil sobre desarrollo web y programación.
-        </p>
-        <p>
-          Estoy abierto a oportunidades laborales donde pueda contribuir, aprender y crecer. Si
-          encuentras una buena oportunidad que se ajuste a mis habilidades y experiencia, no dudes en
-          contactarme.
+          {" "}e Instagram. Y si buscas un desarrollador que contribuya, aprenda rápido y no le
+          tema a los retos, me encantaría que conversemos.
         </p>
       </div>
     </section>
