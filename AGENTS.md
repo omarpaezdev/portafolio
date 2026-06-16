@@ -16,7 +16,7 @@ Never generate generic UI. Always declare aesthetic direction before coding.
 - Frontend: React + Vite (dev port 5173), React Router v6
 - Backend: Flask + SQLAlchemy (port 3001)
 - DB: PostgreSQL (falls back to SQLite if no `DATABASE_URL`)
-- Deploy: Render.com (gunicorn)
+- Deploy: Railway (gunicorn)
 
 ## Commands
 
@@ -28,11 +28,10 @@ npm run lint       # ESLint (jsx/js, React plugin)
 
 # Backend (pipenv)
 pipenv install     # Install Python deps
-pipenv run migrate # Generate Alembic migration
-pipenv run upgrade # Apply migrations
+flask db migrate   # Generate Alembic migration
+flask db upgrade   # Apply migrations
 
-# Render build
-./render_build.sh  # npm install + build + pipenv install + upgrade
+# Railway deploy (runs automatically on git push)
 ```
 
 ## Architecture
@@ -42,23 +41,23 @@ pipenv run upgrade # Apply migrations
 - `src/app.py`: Flask app, serves `dist/` in production
 - `src/wsgi.py`: Gunicorn entry point
 
-Frontend/backend run separately (no proxy). If `VITE_BACKEND_URL` is unset, app renders `<BackendURL>` config component instead of starting.
+Frontend/backend run separately (no proxy).
 
 ## Environment
 
 Copy `.env.example` to `.env`. Required vars:
 
-- `VITE_BACKEND_URL=http://127.0.0.1:3001/` (must be set for frontend to load)
+- `VITE_BACKEND_URL=http://127.0.0.1:3001/` (for dev; leave empty in production)
 - `FLASK_APP=src/app.py`
 - `DATABASE_URL`: Auto-converts `postgres://` to `postgresql://`
 
 ## Database
 
-Migrations: Alembic via Flask-Migrate. First setup: `database.sh` (init + migrate + upgrade). Subsequent: `pipenv run migrate && pipenv run upgrade`.
+Migrations: Alembic via Flask-Migrate. First setup: `database.sh` (init + migrate + upgrade). Subsequent: `flask db migrate && flask db upgrade`.
 
 ## Deployment
 
-Render uses `gunicorn wsgi --chdir ./src/`. Python 3.10.6. Build runs `render_build.sh`.
+Railway connects via GitHub. Procfile starts `gunicorn --chdir ./src --bind 0.0.0.0:$PORT wsgi:app`. Railway auto-installs from Pipfile.
 
 ## Notes
 
