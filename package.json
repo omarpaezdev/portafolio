@@ -1,11 +1,10 @@
 {
-	"name": "react-hello-webapp",
+	"name": "omarpaez-portfolio",
 	"engines": {
 		"node": ">=20.0.0"
 	},
-	"version": "1.0.1",
-	"description": "",
-	"main": "index.js",
+	"version": "1.0.0",
+	"description": "Portfolio personal de Omar Páez — Full Stack Developer",
 	"scripts": {
 		"dev": "vite",
 		"start": "vite",
@@ -13,22 +12,13 @@
 		"lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview"
 	},
-	"author": {
-		"name": "Alejandro Sanchez",
-		"url": "http://alesanchezr.com/"
-	},
-	"contributors": [
-		{
-			"name": "Alejandro Sanchez",
-			"url": "http://alesanchezr.com/"
-		},
-		{
-			"name": "Ignacio Cordoba",
-			"url": "http://github.com/nachovz"
-		}
-	],
+	"author": "Omar Páez",
 	"license": "ISC",
 	"devDependencies": {
+		"@babel/eslint-parser": "^7.29.7",
+		"@babel/plugin-transform-runtime": "^7.29.7",
+		"@babel/preset-env": "^7.29.7",
+		"@babel/preset-react": "^7.29.7",
 		"@types/react": "^18.2.18",
 		"@types/react-dom": "^18.2.7",
 		"@vitejs/plugin-react": "^4.0.4",
@@ -38,24 +28,8 @@
 		"eslint-plugin-react-refresh": "^0.4.3",
 		"vite": "^4.4.8"
 	},
-	"babel": {
-		"presets": [
-			"@babel/preset-env",
-			"@babel/preset-react"
-		],
-		"plugins": [
-			"@babel/plugin-proposal-class-properties",
-			[
-				"@babel/plugin-transform-runtime",
-				{
-					"regenerator": true
-				}
-			]
-		]
-	},
 	"dependencies": {
 		"lucide-react": "^0.561.0",
-		"prop-types": "^15.8.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-router-dom": "^6.18.0"

@@ -33,16 +33,43 @@ export function Contact() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  const getRecaptchaToken = () => {
+    return new Promise((resolve, reject) => {
+      if (window.grecaptcha) {
+        window.grecaptcha.ready(async () => {
+          try {
+            const t = await window.grecaptcha.execute(
+              import.meta.env.VITE_RECAPTCHA_SITE_KEY,
+              { action: "contact" }
+            );
+            resolve(t);
+          } catch (e) { reject(e); }
+        });
+      } else {
+        const s = document.createElement("script");
+        s.src = `https://www.google.com/recaptcha/api.js?render=${import.meta.env.VITE_RECAPTCHA_SITE_KEY}`;
+        s.onload = () => window.grecaptcha.ready(async () => {
+          try {
+            const t = await window.grecaptcha.execute(
+              import.meta.env.VITE_RECAPTCHA_SITE_KEY,
+              { action: "contact" }
+            );
+            resolve(t);
+          } catch (e) { reject(e); }
+        });
+        s.onerror = () => reject(new Error("No se pudo cargar el captcha de seguridad"));
+        document.head.appendChild(s);
+      }
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const token = await window.grecaptcha.execute(
-        import.meta.env.VITE_RECAPTCHA_SITE_KEY,
-        { action: "contact" }
-      );
+      const token = await getRecaptchaToken();
 
       const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
       const res = await fetch(`${backendUrl}api/contact`, {
@@ -158,9 +185,9 @@ export function Footer() {
   return (
     <footer className="op-footer">
       <div className="op-footer-left">
-        <span className="op-footer-copy">
-          © 2026 Omar Alfonso Páez Carrero — Desarrollador Freelance
-        </span>
+          <span className="op-footer-copy">
+            © {new Date().getFullYear()} Omar Alfonso Páez Carrero — Desarrollador Freelance
+          </span>
         <div className="op-footer-links">
           <a href="/aviso-legal">Aviso Legal</a>
           <a href="/politica-privacidad">Política de Privacidad</a>

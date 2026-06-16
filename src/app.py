@@ -10,7 +10,6 @@ from api.utils import APIException, generate_sitemap
 from api.models import db
 from api.routes import api
 from api.admin import setup_admin
-from api.commands import setup_commands
 
 # from models import Person
 
@@ -35,15 +34,19 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.getenv('EMAIL_SENDER')
 app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('EMAIL_SENDER')
+app.config['MAX_CONTENT_LENGTH'] = 1_000_000
 MIGRATE = Migrate(app, db, compare_type=True)
 mail = Mail(app)
 db.init_app(app)
 
-# add the admin
+required_vars = ['EMAIL_SENDER', 'EMAIL_RECIPIENT', 'EMAIL_SMTP_SERVER', 'RECAPTCHA_SECRET_KEY']
+missing = [v for v in required_vars if not os.getenv(v)]
+if missing:
+    app.logger.warning(f"Missing env vars: {', '.join(missing)}")
+
 setup_admin(app)
 
-# add the admin
-setup_commands(app)
+
 
 # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')
@@ -77,4 +80,5 @@ def serve_any_other_file(path):
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
-    app.run(host='0.0.0.0', port=PORT, debug=True)
+    debug_mode = os.getenv('FLASK_DEBUG', '0') == '1'
+    app.run(host='0.0.0.0', port=PORT, debug=debug_mode)

@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 const PROJECTS = [
   {
@@ -24,6 +25,28 @@ const PROJECTS = [
     tags: ["Python", "React", "Bootstrap", "Flask", "APIs REST", "Whatsapp API"],
     demo: "#",
     repo: "#",
+  },
+  {
+    id: 3,
+    title: "Quiniela Mundial 2026",
+    images: [
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594191/inicio_qpt9ee.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594190/pag-1_otaza4.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594190/pag-2_itkvcd.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594191/pag-3_a1gvym.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594191/pag-4_by8zzq.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594190/pag-5_o2jqwx.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594191/pag-6_mtw3ha.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594191/pag-7_qt5uti.png",
+      "https://res.cloudinary.com/dp6e1sg4y/image/upload/v1781594191/pag-8_kzdpms.png",
+    ],
+    desc: "Plataforma web para la gestión de quinielas del Mundial 2026. Los usuarios pueden registrar sus pronósticos, seguir puntuaciones en tiempo real y competir en ligas privadas con amigos. Incluye sistema de autenticación, panel de administración para gestionar partidos y resultados, cálculo automático de puntuaciones según reglas personalizables, y rankings actualizados dinámicamente.",
+    year: "2026",
+    duration: "2 meses",
+    difficulty: "Intermedio",
+    tags: ["Python", "React", "Bootstrap", "Flask", "PostgreSQL", "APIs REST", "JWT"],
+    demo: "https://play.iatecapp.com/",
+    repo: "https://github.com/omarpaezdev/quiniela-mundial-2026",
   },
 ];
 
@@ -63,6 +86,7 @@ function CloseIcon() {
 export default function Projects() {
   const [current, setCurrent] = useState(0);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [imageIndex, setImageIndex] = useState(0);
   const sliderRef = useRef(null);
 
   const goTo = (n) => {
@@ -70,7 +94,7 @@ export default function Projects() {
     setCurrent(idx);
     if (sliderRef.current) {
       const slideW = sliderRef.current.children[0]?.offsetWidth || 0;
-      const gap = 24;
+      const gap = parseFloat(getComputedStyle(sliderRef.current).gap) || 16;
       sliderRef.current.style.transform = `translateX(-${idx * (slideW + gap)}px)`;
     }
   };
@@ -82,8 +106,36 @@ export default function Projects() {
     if (Math.abs(delta) > 50) goTo(current + (delta > 0 ? 1 : -1));
   };
 
-  const needsTruncation = (text) => {
-    return text.length > 180;
+  const needsTruncation = (text) => text.length > 180;
+
+  const openModal = (p) => {
+    document.body.style.overflow = "hidden";
+    setSelectedProject(p);
+    setImageIndex(0);
+  };
+
+  const closeModal = () => {
+    document.body.style.overflow = "";
+    setSelectedProject(null);
+    setImageIndex(0);
+  };
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    const onKey = (e) => { if (e.key === "Escape") closeModal(); };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [selectedProject]);
+
+  const prevImage = () => {
+    setImageIndex((prev) => prev > 0 ? prev - 1 : (selectedProject?.images?.length || 1) - 1);
+  };
+
+  const nextImage = () => {
+    setImageIndex((prev) => ((prev + 1) % (selectedProject?.images?.length || 1)));
   };
 
   return (
@@ -105,9 +157,9 @@ export default function Projects() {
             >
               {PROJECTS.map((p) => (
                 <div className="op-slide" key={p.id}>
-                  <div className="op-project-card">
+                  <div className="op-project-card" onClick={() => openModal(p)}>
                     {p.images && p.images[0] ? (
-                      <img className="op-project-img" src={p.images[0]} alt={p.title} />
+                      <img className="op-project-img" src={p.images[0]} alt={p.title} loading="lazy" />
                     ) : (
                       <div className="op-project-img-placeholder">
                         <span>{p.title}</span>
@@ -131,14 +183,7 @@ export default function Projects() {
                         {needsTruncation(p.desc) && (
                           <button 
                             className="op-btn-link" 
-                            onClick={() => setSelectedProject(p)}
-                            style={{
-                              background: "transparent",
-                              border: "none",
-                              color: "#00e5b0",
-                              cursor: "pointer",
-                              marginTop: "0.5rem"
-                            }}
+                            onClick={(e) => { e.stopPropagation(); openModal(p); }}
                           >
                             Ver más
                           </button>
@@ -159,10 +204,10 @@ export default function Projects() {
                         {p.tags.map((t) => <span className="op-tag" key={t}>{t}</span>)}
                       </div>
                       <div className="op-project-links">
-                        <a href={p.demo} className="op-btn op-btn-sm op-btn-demo" target="_blank" rel="noreferrer">
+                        <a href={p.demo} className="op-btn op-btn-sm op-btn-demo" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
                           ⚡ Demo
                         </a>
-                        <a href={p.repo} className="op-btn op-btn-sm op-btn-gh" target="_blank" rel="noreferrer">
+                        <a href={p.repo} className="op-btn op-btn-sm op-btn-gh" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
                           <GithubIcon /> GitHub
                         </a>
                       </div>
@@ -174,7 +219,7 @@ export default function Projects() {
           </div>
 
           <div className="op-slider-nav">
-            <button className="op-slider-btn" onClick={() => goTo(current - 1)}>
+            <button className="op-slider-btn" aria-label="Anterior" onClick={() => goTo(current - 1)}>
               <ChevronLeft />
             </button>
             <div className="op-slider-dots">
@@ -186,159 +231,59 @@ export default function Projects() {
                 />
               ))}
             </div>
-            <button className="op-slider-btn" onClick={() => goTo(current + 1)}>
+            <button className="op-slider-btn" aria-label="Siguiente" onClick={() => goTo(current + 1)}>
               <ChevronRight />
             </button>
           </div>
         </div>
       </section>
 
-      {selectedProject && (
+      {selectedProject && createPortal(
         <div 
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 1000,
-            background: "rgba(6, 6, 10, 0.92)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem 1rem",
-            backdropFilter: "blur(8px)"
-          }}
-      onClick={() => setSelectedProject(null)}
+          className="op-modal-overlay"
+          onClick={closeModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedProject.title}
         >
-          <div 
-            style={{
-              background: "#06060a",
-              border: "1px solid rgba(0, 229, 176, 0.2)",
-              borderRadius: "16px",
-              width: "100%",
-              maxWidth: "560px",
-              maxHeight: "80vh",
-              overflowX: "hidden",
-              overflowY: "auto",
-              position: "relative",
-              boxShadow: "0 0 60px rgba(0, 229, 176, 0.1), 0 25px 50px rgba(0, 0, 0, 0.5)"
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "2px",
-              background: "linear-gradient(90deg, #00e5b0, transparent)"
-            }} />
+          <div className="op-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="op-modal-accent-line" />
             <button 
-              onClick={() => setSelectedProject(null)}
-              style={{
-                position: "absolute",
-                top: "1rem",
-                right: "1rem",
-                zIndex: 10,
-                background: "#13131d",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: "8px",
-                width: "36px",
-                height: "36px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#9896a4",
-                cursor: "pointer",
-                transition: "all 0.2s"
-              }}
+              className="op-modal-close" 
+              onClick={closeModal}
+              aria-label="Cerrar"
             >
               <CloseIcon />
             </button>
             
-            <div style={{ padding: "1.5rem 1.5rem 0" }}>
-              <h3 style={{
-                fontFamily: "'Syne', sans-serif",
-                fontSize: "1.5rem",
-                fontWeight: 800,
-                letterSpacing: "-0.03em",
-                marginBottom: "1rem"
-              }}>{selectedProject.title}</h3>
+            <div className="op-modal-header">
+              <h3 className="op-modal-title">{selectedProject.title}</h3>
             </div>
 
             {selectedProject.images && selectedProject.images.length > 0 && (
-              <div style={{
-                width: "100%",
-                minHeight: "250px",
-                maxHeight: "400px",
-                background: "#0d0d14",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "relative",
-                overflow: "hidden"
-              }}>
+              <div className="op-modal-gallery">
                 {selectedProject.images.length > 1 && (
                   <button 
-                    onClick={() => {
-                      const images = selectedProject.images;
-                      const currentIdx = images.indexOf(selectedProject.images[0]);
-                      const newIdx = (currentIdx - 1 + images.length) % images.length;
-                      setSelectedProject({...selectedProject, _currentImage: newIdx});
-                    }}
-                    style={{
-                      position: "absolute",
-                      left: "1rem",
-                      zIndex: 10,
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                      background: "rgba(19, 19, 29, 0.8)",
-                      color: "#9896a4",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "all 0.2s",
-                      backdropFilter: "blur(4px)"
-                    }}
+                    className="op-gallery-btn" 
+                    onClick={prevImage}
+                    aria-label="Imagen anterior"
                   >
                     <ChevronLeft />
                   </button>
                 )}
-                <img 
-                  src={selectedProject.images[selectedProject._currentImage || 0]} 
-                  alt={selectedProject.title}
-                  style={{
-                    maxWidth: "90%",
-                    maxHeight: "350px",
-                    objectFit: "contain"
-                  }} 
-                />
+                <div className="op-modal-image-wrap">
+                  <img 
+                    className="op-modal-image"
+                    src={selectedProject.images[imageIndex]} 
+                    alt={`${selectedProject.title} - Imagen ${imageIndex + 1}`}
+                    loading="lazy"
+                  />
+                </div>
                 {selectedProject.images.length > 1 && (
                   <button 
-                    onClick={() => {
-                      const images = selectedProject.images;
-                      const currentIdx = selectedProject._currentImage || 0;
-                      const newIdx = (currentIdx + 1) % images.length;
-                      setSelectedProject({...selectedProject, _currentImage: newIdx});
-                    }}
-                    style={{
-                      position: "absolute",
-                      right: "1rem",
-                      zIndex: 10,
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                      background: "rgba(19, 19, 29, 0.8)",
-                      color: "#9896a4",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "all 0.2s",
-                      backdropFilter: "blur(4px)"
-                    }}
+                    className="op-gallery-btn" 
+                    onClick={nextImage}
+                    aria-label="Imagen siguiente"
                   >
                     <ChevronRight />
                   </button>
@@ -347,114 +292,61 @@ export default function Projects() {
             )}
 
             {selectedProject.images && selectedProject.images.length > 1 && (
-              <div style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "0.5rem",
-                padding: "1rem 0"
-              }}>
+              <div className="op-modal-dots">
                 {selectedProject.images.map((_, i) => (
                   <button
                     key={i}
-                    onClick={() => setSelectedProject({...selectedProject, _currentImage: i})}
-                    style={{
-                      width: (selectedProject._currentImage || 0) === i ? "20px" : "8px",
-                      height: "8px",
-                      borderRadius: (selectedProject._currentImage || 0) === i ? "4px" : "50%",
-                      background: (selectedProject._currentImage || 0) === i ? "#00e5b0" : "#5a5868",
-                      border: "none",
-                      cursor: "pointer",
-                      transition: "all 0.3s",
-                      padding: 0
-                    }}
+                    className={`op-modal-dot${i === imageIndex ? " active" : ""}`}
+                    onClick={() => setImageIndex(i)}
+                    aria-label={`Ir a imagen ${i + 1}`}
                   />
                 ))}
               </div>
             )}
 
-            <div style={{ padding: "0 1.5rem 2rem" }}>
-              <p style={{
-                color: "#9896a4",
-                fontSize: "0.95rem",
-                lineHeight: 1.8,
-                whiteSpace: "pre-wrap",
-                marginBottom: "1.5rem"
-              }}>{selectedProject.desc}</p>
+            <div className="op-modal-body">
+              <p className="op-modal-desc">{selectedProject.desc}</p>
               
-              <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
-                  <span>📅</span><span><strong style={{ color: "#f0eee8" }}>Año:</strong> {selectedProject.year}</span>
+              <div className="op-modal-meta">
+                <div className="op-project-meta-item">
+                  <span>📅</span><span><strong>Año:</strong> {selectedProject.year}</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
-                  <span>⏱</span><span><strong style={{ color: "#f0eee8" }}>Duración:</strong> {selectedProject.duration}</span>
+                <div className="op-project-meta-item">
+                  <span>⏱</span><span><strong>Duración:</strong> {selectedProject.duration}</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "#9896a4" }}>
-                  <span>🎯</span><span><strong style={{ color: "#f0eee8" }}>Dificultad:</strong> {selectedProject.difficulty}</span>
+                <div className="op-project-meta-item">
+                  <span>🎯</span><span><strong>Dificultad:</strong> {selectedProject.difficulty}</span>
                 </div>
               </div>
               
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1.75rem" }}>
+              <div className="op-project-tags" style={{ marginBottom: "1.75rem" }}>
                 {selectedProject.tags.map((t) => (
-                  <span 
-                    key={t}
-                    style={{
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: "0.68rem",
-                      color: "#00e5b0",
-                      background: "rgba(0,229,176,0.08)",
-                      border: "1px solid rgba(0,229,176,0.2)",
-                      padding: "0.28rem 0.7rem",
-                      borderRadius: "4px",
-                      letterSpacing: "0.04em"
-                    }}
-                  >
-                    {t}
-                  </span>
+                  <span className="op-tag" key={t}>{t}</span>
                 ))}
               </div>
               
-              <div style={{ display: "flex", gap: "0.75rem" }}>
+              <div className="op-project-links">
                 <a 
                   href={selectedProject.demo} 
-                  style={{
-                    background: "transparent",
-                    color: "#00e5b0",
-                    border: "1px solid #00e5b0",
-                    padding: "0.6rem 1.25rem",
-                    borderRadius: "4px",
-                    textDecoration: "none",
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: "0.72rem",
-                    letterSpacing: "0.08em",
-                    transition: "all 0.2s"
-                  }}
+                  className="op-btn op-btn-sm op-btn-demo"
+                  target="_blank" 
+                  rel="noreferrer"
                 >
                   ⚡ Demo
                 </a>
                 <a 
                   href={selectedProject.repo} 
-                  style={{
-                    background: "#13131d",
-                    color: "#f0eee8",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    padding: "0.6rem 1.25rem",
-                    borderRadius: "4px",
-                    textDecoration: "none",
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: "0.72rem",
-                    letterSpacing: "0.08em",
-                    transition: "all 0.2s",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.5rem"
-                  }}
+                  className="op-btn op-btn-sm op-btn-gh"
+                  target="_blank" 
+                  rel="noreferrer"
                 >
                   <GithubIcon /> GitHub
                 </a>
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

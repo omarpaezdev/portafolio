@@ -22,12 +22,12 @@ export default function Hero() {
           <div className="op-hero-actions">
             <a href="#contacto" className="op-btn op-btn-primary">Contáctame →</a>
             {/* Reemplaza href con la URL real de tu CV */}
-            <a href="https://drive.google.com/file/d/1uQKcxLLc7zSurrjowhzDnfY1VGxSEBkS/view?usp=sharing" target="_blank" rel="noopener" className="op-btn op-btn-ghost">Descargar CV</a>
+            <a href="https://drive.google.com/file/d/1uQKcxLLc7zSurrjowhzDnfY1VGxSEBkS/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="op-btn op-btn-ghost">Descargar CV</a>
           </div>
         </div>
 
         <div className="op-hero-photo-wrap">
-          <img className="op-hero-photo" src={foto} alt="Omar Páez" />
+          <img className="op-hero-photo" src={foto} alt="Omar Páez" loading="eager" />
 
         </div>
       </div>
