@@ -34,26 +34,23 @@ export function Contact() {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const getRecaptchaToken = () => {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+    if (!siteKey) return Promise.resolve("");
+
     return new Promise((resolve, reject) => {
       if (window.grecaptcha) {
         window.grecaptcha.ready(async () => {
           try {
-            const t = await window.grecaptcha.execute(
-              import.meta.env.VITE_RECAPTCHA_SITE_KEY,
-              { action: "contact" }
-            );
+            const t = await window.grecaptcha.execute(siteKey, { action: "contact" });
             resolve(t);
           } catch (e) { reject(e); }
         });
       } else {
         const s = document.createElement("script");
-        s.src = `https://www.google.com/recaptcha/api.js?render=${import.meta.env.VITE_RECAPTCHA_SITE_KEY}`;
+        s.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
         s.onload = () => window.grecaptcha.ready(async () => {
           try {
-            const t = await window.grecaptcha.execute(
-              import.meta.env.VITE_RECAPTCHA_SITE_KEY,
-              { action: "contact" }
-            );
+            const t = await window.grecaptcha.execute(siteKey, { action: "contact" });
             resolve(t);
           } catch (e) { reject(e); }
         });
