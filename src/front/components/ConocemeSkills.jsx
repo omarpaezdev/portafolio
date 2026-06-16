@@ -108,7 +108,7 @@ export function Skills() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 900);
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
