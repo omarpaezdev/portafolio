@@ -1,7 +1,57 @@
 import { useState, useEffect } from "react";
+import { useNavScroll } from "../hooks/usePortfolio";
+
+const NAV_LINKS = [
+  { href: "#inicio", label: "Inicio" },
+  { href: "#conoceme", label: "Sobre mí" },
+  { href: "#skills", label: "Habilidades" },
+  { href: "#proyectos", label: "Proyectos" },
+  { href: "#experiencia", label: "Experiencia" },
+  { href: "#contacto", label: "Contacto" },
+];
 
 export function Navbar() {
-  return null;
+  useNavScroll();
+  const [active, setActive] = useState("");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    NAV_LINKS.forEach((l) => {
+      const el = document.querySelector(l.href);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <nav className="op-nav" id="op-nav" aria-label="Navegación principal">
+      <a href="#inicio" className="op-nav-logo" aria-label="Inicio">
+        OP<span>.</span>
+      </a>
+      <ul className="op-nav-links">
+        {NAV_LINKS.map((l) => (
+          <li key={l.href}>
+            <a
+              href={l.href}
+              className={active === l.href ? "active" : ""}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="#contacto" className="op-btn op-btn-primary op-btn-sm">
+        Contáctame
+      </a>
+    </nav>
+  );
 }
 
 export function MobileNav() {
@@ -17,9 +67,10 @@ export function MobileNav() {
 
   const links = [
     { href: "#inicio", label: "Inicio" },
-    { href: "#conoceme", label: "Conóceme" },
-    { href: "#skills", label: "Skills" },
+    { href: "#conoceme", label: "Sobre mí" },
+    { href: "#skills", label: "Habilidades" },
     { href: "#proyectos", label: "Proyectos" },
+    { href: "#experiencia", label: "Experiencia" },
     { href: "#contacto", label: "Contacto" },
   ];
 

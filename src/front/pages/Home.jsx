@@ -4,6 +4,7 @@ import { useCursor, useBgCanvas, useScrollReveal, useNavScroll } from "../hooks/
 import Hero from "../components/Hero.jsx";
 import { Conoceme, Skills } from "../components/ConocemeSkills.jsx";
 import Projects from "../components/Projects.jsx";
+import Experience from "../components/Experience.jsx";
 import { Contact } from "../components/ContactFooter.jsx";
 
 export const Home = () => {
@@ -23,6 +24,7 @@ export const Home = () => {
         <Conoceme />
         <Skills />
         <Projects />
+        <Experience />
         <Contact />
       </main>
     </>

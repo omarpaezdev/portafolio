@@ -104,7 +104,7 @@ export function Contact() {
   return (
     <section className="op-section" id="contacto">
       <div className="op-section-header op-reveal">
-        <span className="op-section-num">04</span>
+        <span className="op-section-num">05</span>
         <h2 className="op-section-title">Contacto</h2>
         <div className="op-section-line" />
       </div>
@@ -135,40 +135,50 @@ export function Contact() {
         {/* Form */}
         <div className="op-form-card op-reveal op-rd2">
           <h3>Envíame un mensaje</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="op-form-group">
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="op-form-group op-floating">
               <input
-                name="name" className="op-input" placeholder="Su nombre"
-                value={form.name} onChange={handleChange} required
+                name="name" className="op-input" placeholder=" "
+                value={form.name} onChange={handleChange} required id="f-name"
               />
+              <label htmlFor="f-name" className="op-label">Su nombre</label>
             </div>
-            <div className="op-form-group">
+            <div className="op-form-group op-floating">
               <input
-                name="email" type="email" className="op-input" placeholder="Su correo electrónico"
-                value={form.email} onChange={handleChange} required
+                name="email" type="email" className="op-input" placeholder=" "
+                value={form.email} onChange={handleChange} required id="f-email"
               />
+              <label htmlFor="f-email" className="op-label">Su correo electrónico</label>
             </div>
-            <div className="op-form-group">
+            <div className="op-form-group op-floating">
               <select
                 name="topic" className="op-select"
-                value={form.topic} onChange={handleChange} required
+                value={form.topic} onChange={handleChange} required id="f-topic"
               >
-                <option value="" disabled>Seleccione un tema...</option>
+                <option value="" disabled></option>
                 <option value="empleo">Oportunidad laboral</option>
                 <option value="freelance">Proyecto freelance</option>
                 <option value="consulta">Consulta técnica</option>
                 <option value="otro">Otro</option>
               </select>
+              <label htmlFor="f-topic" className="op-label">Seleccione un tema</label>
             </div>
-            <div className="op-form-group">
+            <div className="op-form-group op-floating">
               <textarea
-                name="message" className="op-textarea" placeholder="Su mensaje..."
-                value={form.message} onChange={handleChange} required
+                name="message" className="op-textarea" placeholder=" "
+                value={form.message} onChange={handleChange} required id="f-msg"
               />
+              <label htmlFor="f-msg" className="op-label">Su mensaje...</label>
             </div>
             {error && <div className="op-form-error">{error}</div>}
             <button type="submit" className="op-btn-send" disabled={loading}>
-              {loading ? "Enviando..." : sent ? "✓ Mensaje enviado" : "Enviar"}
+              {loading ? (
+                <span className="op-spinner" />
+              ) : sent ? (
+                "✓ Mensaje enviado"
+              ) : (
+                "Enviar mensaje →"
+              )}
             </button>
           </form>
         </div>
