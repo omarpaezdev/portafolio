@@ -68,7 +68,8 @@ export function Contact() {
     try {
       const token = await getRecaptchaToken();
 
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+      let backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+      if (backendUrl && !backendUrl.endsWith("/")) backendUrl += "/";
       const res = await fetch(`${backendUrl}api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
