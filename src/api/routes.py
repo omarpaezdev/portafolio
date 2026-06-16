@@ -80,7 +80,7 @@ def handle_contact():
     if not re.match(email_regex, email):
         return jsonify({'error': 'Formato de email inválido'}), 400
     
-    if os.getenv('RECAPTCHA_SECRET_KEY') and not verify_recaptcha(recaptcha_token):
+    if recaptcha_token and os.getenv('RECAPTCHA_SECRET_KEY') and not verify_recaptcha(recaptcha_token):
         return jsonify({'error': 'Verificación de seguridad fallida'}), 403
     
     topic_labels = {
